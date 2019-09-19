@@ -5,8 +5,10 @@ function getValues() {
   console.clear();
 
   const plainStr = document.getElementById("msg").value;
-  const key = document.getElementById("key").value;
+  const key = parseInt(document.getElementById("key").value);
   const normalizedStr = plainStr.toLowerCase();
+
+  if (isNaN(key)) return window.alert("A chave deve ser um numero inteiro");
 
   console.log(`plain: ${plainStr}`);
   console.log(`normalized: ${normalizedStr}`);
@@ -22,24 +24,28 @@ function getValues() {
 function encrypt(str, key) {
   let encryptedStr = "";
 
-  str.split("").map(char => {
-    const ASCIIChar = toASCII(char);
+  str
+    .split("")
+    .filter(char => {
+      const ASCIIChar = toASCII(char);
+      return ASCIIChar == 32 || (ASCIIChar >= 97 && ASCIIChar <= 122);
+    })
+    .map(char => {
+      const ASCIIChar = toASCII(char);
 
-    if (ASCIIChar == 32) {
-      encryptedStr += " ";
-    } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
-      const cypherChar = String.fromCharCode(ASCIIChar + parseInt(key));
+      if (ASCIIChar == 32) {
+        encryptedStr += "-";
+      } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
+        const cypherChar = String.fromCharCode(ASCIIChar + parseInt(key));
 
-      const normalizedCypherChar =
-        toASCII(cypherChar) > 122
-          ? String.fromCharCode(toASCII(cypherChar) - 26)
-          : cypherChar;
+        const normalizedCypherChar =
+          toASCII(cypherChar) > 122
+            ? String.fromCharCode(toASCII(cypherChar) - 26)
+            : cypherChar;
 
-      encryptedStr += normalizedCypherChar;
-    } else {
-      encryptedStr += "";
-    }
-  });
+        encryptedStr += normalizedCypherChar;
+      }
+    });
 
   return encryptedStr;
 }
@@ -47,24 +53,30 @@ function encrypt(str, key) {
 function decrypt(str, key) {
   let decyptedSrt = "";
 
-  str.split("").map(char => {
-    const ASCIIChar = toASCII(char);
+  str
+    .split("")
+    .filter(char => {
+      const ASCIIChar = toASCII(char);
+      return ASCIIChar == 45 || (ASCIIChar >= 97 && ASCIIChar <= 122);
+    })
+    .map(char => {
+      const ASCIIChar = toASCII(char);
 
-    if (ASCIIChar == 32) {
-      decyptedSrt += " ";
-    } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
-      const plainChar = String.fromCharCode(ASCIIChar - parseInt(key));
+      if (ASCIIChar == 45) {
+        decyptedSrt += " ";
+      } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
+        const plainChar = String.fromCharCode(ASCIIChar - parseInt(key));
 
-      const normalizedPlainChar =
-        toASCII(plainChar) < 97
-          ? String.fromCharCode(toASCII(plainChar) + 26)
-          : plainChar;
+        const normalizedPlainChar =
+          toASCII(plainChar) < 97
+            ? String.fromCharCode(toASCII(plainChar) + 26)
+            : plainChar;
 
-      decyptedSrt += normalizedPlainChar;
-    } else {
-      decyptedSrt += "";
-    }
-  });
+        decyptedSrt += normalizedPlainChar;
+      } else {
+        decyptedSrt += "";
+      }
+    });
 
   return decyptedSrt;
 }
