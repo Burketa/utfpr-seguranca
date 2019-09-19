@@ -14,12 +14,9 @@ function getValues() {
   console.log("\n");
 
   const encrypted = encrypt(normalizedStr, key);
-  console.log(`Cyphered: ${encrypted}`);
-
-  console.log("\n");
-
   const plain = decrypt(encrypted, key);
-  console.log(`Plain: ${plain}`);
+
+  createElements(encrypted, plain);
 }
 
 function encrypt(str, key) {
@@ -27,20 +24,20 @@ function encrypt(str, key) {
 
   str.split("").map(char => {
     const ASCIIChar = toASCII(char);
-    const cypherChar = String.fromCharCode(ASCIIChar + parseInt(key));
 
-    const normalizedCypherChar =
-      toASCII(cypherChar) > 122
-        ? String.fromCharCode(toASCII(cypherChar) - 26)
-        : cypherChar;
+    if (ASCIIChar == 32) {
+      encryptedStr += " ";
+    } else {
+      const cypherChar = String.fromCharCode(ASCIIChar + parseInt(key));
 
-    encryptedStr += normalizedCypherChar;
+      const normalizedCypherChar =
+        toASCII(cypherChar) > 122
+          ? String.fromCharCode(toASCII(cypherChar) - 26)
+          : cypherChar;
+
+      encryptedStr += normalizedCypherChar;
+    }
   });
-
-  /*console.log(`ASCII Char: ${String.fromCharCode(ASCIIChar)}`);
-    console.log(`ASCII Code: ${ASCIIChar}`);
-    console.log(`ASCII Char + Key \(Cyphered\): ${cypherChar}`);
-    console.log("\n");*/
 
   return encryptedStr;
 }
@@ -50,24 +47,40 @@ function decrypt(str, key) {
 
   str.split("").map(char => {
     const ASCIIChar = toASCII(char);
-    const plainChar = String.fromCharCode(ASCIIChar - parseInt(key));
+    if (ASCIIChar == 32) {
+      decyptedSrt += " ";
+    } else {
+      const plainChar = String.fromCharCode(ASCIIChar - parseInt(key));
 
-    const normalizedPlainChar =
-      toASCII(plainChar) < 97
-        ? String.fromCharCode(toASCII(plainChar) + 26)
-        : plainChar;
+      const normalizedPlainChar =
+        toASCII(plainChar) < 97
+          ? String.fromCharCode(toASCII(plainChar) + 26)
+          : plainChar;
 
-    decyptedSrt += normalizedPlainChar;
+      decyptedSrt += normalizedPlainChar;
+    }
   });
-
-  /*console.log(`ASCII Char: ${String.fromCharCode(ASCIIChar)}`);
-    console.log(`ASCII Code: ${ASCIIChar}`);
-    console.log(`ASCII Char - Key \(Plain\): ${plainChar}`);
-    console.log("\n");*/
 
   return decyptedSrt;
 }
 
 function toASCII(char) {
   return char.charCodeAt();
+}
+
+function createElements(cyphered, plain) {
+  const div = document.querySelector("div");
+  div.innerHTML = "";
+
+  const p = document.createElement("p");
+
+  const cypheredText = document.createTextNode(`Codificada: ${cyphered}`);
+  const plainText = document.createTextNode(`Decodificada: ${plain}`);
+
+  p.appendChild(cypheredText);
+  p.appendChild(document.createElement("br"));
+  p.appendChild(document.createElement("br"));
+  p.appendChild(plainText);
+
+  div.appendChild(p);
 }
