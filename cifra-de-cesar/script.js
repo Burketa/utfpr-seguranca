@@ -1,3 +1,9 @@
+//Trabalho de Segurança, implementando a Cifra de César
+const plainSpace = " ";
+const cypheredSpace = "-";
+const plainSpaceASCII = plainSpace.charCodeAt();
+const cypheredSpaceASCII = cypheredSpace.charCodeAt();
+
 let button = document.getElementById("button");
 button.onclick = getValues;
 
@@ -28,13 +34,15 @@ function encrypt(str, key) {
     .split("")
     .filter(char => {
       const ASCIIChar = toASCII(char);
-      return ASCIIChar == 32 || (ASCIIChar >= 97 && ASCIIChar <= 122);
+      return (
+        ASCIIChar == plainSpaceASCII || (ASCIIChar >= 97 && ASCIIChar <= 122)
+      );
     })
     .map(char => {
       const ASCIIChar = toASCII(char);
 
-      if (ASCIIChar == 32) {
-        encryptedStr += "-";
+      if (ASCIIChar == plainSpaceASCII) {
+        encryptedStr += cypheredSpace;
       } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
         const cypherChar = String.fromCharCode(ASCIIChar + parseInt(key));
 
@@ -57,13 +65,15 @@ function decrypt(str, key) {
     .split("")
     .filter(char => {
       const ASCIIChar = toASCII(char);
-      return ASCIIChar == 45 || (ASCIIChar >= 97 && ASCIIChar <= 122);
+      return (
+        ASCIIChar == cypheredSpaceASCII || (ASCIIChar >= 97 && ASCIIChar <= 122)
+      );
     })
     .map(char => {
       const ASCIIChar = toASCII(char);
 
-      if (ASCIIChar == 45) {
-        decyptedSrt += " ";
+      if (ASCIIChar == cypheredSpaceASCII) {
+        decyptedSrt += plainSpace;
       } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
         const plainChar = String.fromCharCode(ASCIIChar - parseInt(key));
 
