@@ -27,7 +27,7 @@ function encrypt(str, key) {
 
     if (ASCIIChar == 32) {
       encryptedStr += " ";
-    } else {
+    } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
       const cypherChar = String.fromCharCode(ASCIIChar + parseInt(key));
 
       const normalizedCypherChar =
@@ -36,6 +36,8 @@ function encrypt(str, key) {
           : cypherChar;
 
       encryptedStr += normalizedCypherChar;
+    } else {
+      encryptedStr += "";
     }
   });
 
@@ -47,9 +49,10 @@ function decrypt(str, key) {
 
   str.split("").map(char => {
     const ASCIIChar = toASCII(char);
+
     if (ASCIIChar == 32) {
       decyptedSrt += " ";
-    } else {
+    } else if (ASCIIChar >= 97 && ASCIIChar <= 122) {
       const plainChar = String.fromCharCode(ASCIIChar - parseInt(key));
 
       const normalizedPlainChar =
@@ -58,6 +61,8 @@ function decrypt(str, key) {
           : plainChar;
 
       decyptedSrt += normalizedPlainChar;
+    } else {
+      decyptedSrt += "";
     }
   });
 
